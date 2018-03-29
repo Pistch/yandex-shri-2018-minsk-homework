@@ -1,0 +1,22 @@
+{
+  "280": {
+    "minHeight": 60,
+    "maxHeight": 100
+  },
+  "700": {
+    "minHeight": 80,
+    "maxHeight": 150
+  },
+  "1000": {
+    "minHeight": 80,
+    "maxHeight": 160
+  },
+  "1200": {
+    "minHeight": 100,
+    "maxHeight": 200
+  },
+  "1400": {
+    "minHeight": 120,
+    "maxHeight": 220
+  }
+}

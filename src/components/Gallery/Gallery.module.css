@@ -1,0 +1,21 @@
+.Gallery {
+    width: 100%;
+    height: 100%;
+}
+
+.GalleryRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 4px;
+}
+
+.Gallery.Mobile.Vertical {
+
+}
+
+.Gallery.Mobile.Horizontal {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}

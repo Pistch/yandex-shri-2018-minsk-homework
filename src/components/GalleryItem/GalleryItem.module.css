@@ -1,0 +1,22 @@
+.PreviewContainer {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 7px;
+}
+
+.Preview {
+    cursor: pointer;
+    touch-action: manipulation;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px 3px rgba(0,0,0,0.5);
+    transition: all .1s;
+}
+
+.Preview:hover {
+    box-shadow: 0 0 10px 1px rgba(0,0,0,0.5);
+}
+
+.Preview:active {
+    box-shadow: 0 0 5px 1px rgba(0,0,0,0.5);
+}

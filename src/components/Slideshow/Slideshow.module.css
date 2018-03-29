@@ -1,0 +1,76 @@
+.SlideshowOverlay {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.PictureSequenceContainer {
+    height: 100%;
+    transition: all .1s;
+}
+
+.PictureContainer {
+    width: 100vw;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Picture {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.Controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Controls.Desktop {
+    align-items: center;
+}
+
+.Controls.Mobile.Vertical {
+    align-items: flex-end;
+}
+
+.Controls.Mobile.Horizontal {
+    align-items: center;
+}
+
+.Button {
+    touch-action: manipulation;
+    background: none;
+    border: none;
+    outline: none;
+    width: 5rem;
+    height: 5rem;
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    opacity: .6;
+    filter: drop-shadow(0 0 2px #000);
+    transition: all .1s;
+}
+
+.Button:hover {
+    filter: drop-shadow(0 0 4px #000);
+    opacity: 1;
+}
+
+.Button:active {
+    filter: drop-shadow(0 0 1px #000);
+}
+
+.CloseButton {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
