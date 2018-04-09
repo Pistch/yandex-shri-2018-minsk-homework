@@ -31,7 +31,7 @@ class App extends Component {
   }
 
   async loadPictures() {
-    const picturesQuery = await fetch('pictures.json'),
+    const picturesQuery = await fetch('/pictures-data'),
       pictures = await picturesQuery.json();
 
     this.setState({ pictures });

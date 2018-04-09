@@ -7,7 +7,7 @@ function getImageData(path) {
   return info(path);
 }
 
-const root = path.join(__dirname, '../public/pictures');
+const root = path.join(__dirname, '../../pictures');
 
 async function parseImages() {
   let dir = new Promise((resolve, reject) => {
@@ -25,19 +25,9 @@ async function parseImages() {
 
   imagesInfo = imagesInfo.filter(img => img);
 
-  fs.open(path.join(root, '../pictures.json'), "w+", 0644, function(err, file_handle) {
-    if (!err) {
-      fs.write(file_handle, JSON.stringify(imagesInfo), null, 'ascii', function(err, written) {
-        if (!err) {
-          console.log("Success! ", written);
-        } else {
-          console.log("Write error", err);
-        }
-      });
-    } else {
-      console.log("File opening error! ", err);
-    }
-  });
+  imagesInfo.sort(() => Math.random() - 0.5);
+
+  return Promise.resolve(imagesInfo);
 }
 
-parseImages();
+module.exports = parseImages;
