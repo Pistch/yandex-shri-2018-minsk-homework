@@ -1,10 +1,12 @@
 # Домашнее задание для ШРИ 2018 в Минске
 
+[![Build Status](https://travis-ci.org/Pistch/yandex-shri-2018-minsk-homework.svg?branch=master)](https://travis-ci.org/Pistch/yandex-shri-2018-minsk-homework)
+
 ## Запуск
 
-1. Положить в папку `public/pictures` нужные картинки
-2. Запустить `npm run parse-pictures`, дождаться выполнения
-3. В зависимости от целей `npm run start` или `npm run build`
+1. Положить в папку `pictures` нужные картинки
+2. Запустить `npm run server`
+3. Запустить `npm run dev`
 
 ## TODO
 
