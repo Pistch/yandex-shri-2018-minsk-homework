@@ -5,6 +5,7 @@ import styles from './App.module.css';
 
 import Gallery from '../Gallery/Gallery';
 import Slideshow from '../Slideshow/Slideshow';
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 
 class App extends Component {
@@ -53,12 +54,23 @@ class App extends Component {
     });
   }
 
+  renderLoading() {
+    if (this.state.pictures[0]) return null;
+    return (
+      <div className={styles.LoadingContainer}>
+        <p className={styles.LoadingText}>Пожалуйста, подождите</p>
+        <LoadingIndicator/>
+      </div>
+    );
+  }
+
   render() {
     const mobile = this.state.realWidth < 768,
       width = mobile ? this.state.realWidth : this.state.width;
 
     return (
       <div className={styles.App}>
+        {this.renderLoading()}
         {this.state.focusedPic !== null && (
           <Slideshow
             pictures={this.state.pictures}
