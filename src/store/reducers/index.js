@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-export default combineReducers({
-  pictures: (state) => {
-    if (!state) return {};
+import picturesReducer from './pictures';
+import appearanceReducer from './appearance';
 
-    return state;
-  },
+export default combineReducers({
+  pictures: picturesReducer,
+  appearance: appearanceReducer,
 });

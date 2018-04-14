@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import { fetchNext, selectPicture, closeSlideshow } from '../../store/actions';
+
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 import styles from './Slideshow.module.css';
 
@@ -12,9 +17,16 @@ class Slideshow extends Component {
       gesture: undefined,
     };
     this.onKeyPress = this.onKeyPress.bind(this);
+    this.nextPicture = this.nextPicture.bind(this);
+    this.previousPicture = this.previousPicture.bind(this);
+    this.close = this.close.bind(this);
+    this.touchStart = this.touchStart.bind(this);
+    this.touchMove = this.touchMove.bind(this);
+    this.touchEnd = this.touchEnd.bind(this);
   }
 
   componentWillMount() {
+    if (!this.props.pictures[0]) this.props.fetchNext(0, this.props.picturesToLoad);
     window.addEventListener('keyup', this.onKeyPress);
   }
 
@@ -28,12 +40,12 @@ class Slideshow extends Component {
     switch (keyCode) {
       case 37:
       case 38:
-        return this.props.previousPicture();
+        return this.previousPicture();
       case 39:
       case 40:
-        return this.props.nextPicture();
+        return this.nextPicture();
       case 27:
-        return this.props.close();
+        return this.close();
       default:
         return null;
     }
@@ -91,7 +103,7 @@ class Slideshow extends Component {
   }
 
   touchEnd() {
-    const changeSlideFunction = this.state.moveX > 0 ? this.props.previousPicture : this.props.nextPicture,
+    const changeSlideFunction = this.state.moveX > 0 ? this.previousPicture : this.nextPicture,
       { gesture } = this.state;
 
     if (gesture === 'HORIZONTAL_SWIPE' && Math.abs(this.state.moveX) > this.props.width / 3) {
@@ -99,7 +111,7 @@ class Slideshow extends Component {
     }
 
     if (gesture === 'VERTICAL_SWIPE' && -this.state.moveY > this.props.height / 3) {
-      return this.props.close();
+      return this.close();
     }
 
     this.setState({
@@ -110,14 +122,51 @@ class Slideshow extends Component {
     });
   }
 
+  nextPicture() {
+    if (this.props.pictures.length - 1 === this.props.selectedPictureIndex) return;
+    if (!this.props.loading &&
+      this.props.pictures.length < this.props.selectedPictureIndex + this.props.picturesToLoad) {
+      this.props.fetchNext(this.props.pictures.length);
+    }
+    this.props.selectPicture(this.props.selectedPictureIndex + 1, this.props.picturesToLoad);
+  }
+
+  previousPicture() {
+    if (!this.props.selectedPictureIndex) return;
+    this.props.selectPicture(this.props.selectedPictureIndex - 1, this.props.picturesToLoad);
+  }
+
+  close() {
+    this.props.closeSlideshow();
+  }
+
   renderPictureSequence() {
     const { pictures, selectedPictureIndex } = this.props,
       picturesQuantity = pictures.length,
       moveX = this.state.gesture === 'HORIZONTAL_SWIPE' ? this.state.moveX : 0,
-      postiveMoveY = this.state.moveY < 0 ? this.state.moveY : 0,
-      moveY = this.state.gesture === 'VERTICAL_SWIPE' ? postiveMoveY : 0,
+      positiveMoveY = this.state.moveY < 0 ? this.state.moveY : 0,
+      moveY = this.state.gesture === 'VERTICAL_SWIPE' ? positiveMoveY : 0,
       translateString = `calc(${-(100 * (selectedPictureIndex / picturesQuantity))}% + ${moveX}px), ${moveY}px`,
       opacity = this.state.gesture === 'VERTICAL_SWIPE' ? 1 + (moveY / this.props.height) : 1;
+
+    const row = pictures.map((picture, i) => (
+      <div className={styles.PictureContainer} key={`${picture.name}${Math.random()}`}>
+        <img
+          src={Math.abs(i - selectedPictureIndex) <= 1 ? `pictures/${picture.name}` : ''}
+          alt=""
+          className={styles.Picture}
+          style={{ opacity }}
+        />
+      </div>
+    ));
+
+    if (this.props.loading) {
+      row.push((
+        <div className={styles.PictureContainer} key={Math.random()}>
+          <LoadingIndicator />
+        </div>
+      ));
+    }
 
     return (
       <div
@@ -127,30 +176,14 @@ class Slideshow extends Component {
           transform: `translate(${translateString})`,
         }}
       >
-        {
-          pictures.map((picture, i) => (
-            <div className={styles.PictureContainer} key={picture.name}>
-              <img
-                src={Math.abs(i - selectedPictureIndex) <= 1 ? `pictures/${picture.name}` : ''}
-                alt=""
-                className={styles.Picture}
-                style={{ opacity }}
-              />
-            </div>
-          ))
-        }
+        {row}
       </div>
     );
   }
 
   render() {
-    const {
-      nextPicture,
-      previousPicture,
-      close,
-      mobile,
-      orientation,
-    } = this.props;
+    const { mobile, orientation, selectedPictureIndex } = this.props,
+      picsQuantity = this.props.pictures.length;
 
     return (
       <React.Fragment>
@@ -162,14 +195,22 @@ class Slideshow extends Component {
             ${mobile ? styles.Mobile : styles.Desktop}
             ${orientation ? styles.Horizontal : styles.Vertical}
            `}
-          onTouchStart={this.touchStart.bind(this)}
-          onTouchMove={this.touchMove.bind(this)}
-          onTouchEnd={this.touchEnd.bind(this)}
+          onTouchStart={this.touchStart}
+          onTouchMove={this.touchMove}
+          onTouchEnd={this.touchEnd}
         >
-          <button onClick={previousPicture} className={styles.Button}>&larr;</button>
-          <button onClick={nextPicture} className={styles.Button}>&rarr;</button>
+          {
+            selectedPictureIndex ?
+              (<button onClick={this.previousPicture} className={styles.Button}>&larr;</button>) :
+              (<span />)
+          }
+          {
+            selectedPictureIndex !== picsQuantity - 1 ?
+              (<button onClick={this.nextPicture} className={styles.Button}>&rarr;</button>) :
+              (<span />)
+          }
         </div>
-        <button onClick={close} className={`${styles.Button} ${styles.CloseButton}`}>&times;</button>
+        <button onClick={this.close} className={`${styles.Button} ${styles.CloseButton}`}>&times;</button>
       </React.Fragment>
     );
   }
@@ -184,11 +225,22 @@ Slideshow.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
   })).isRequired,
-  previousPicture: PropTypes.func.isRequired,
-  nextPicture: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  closeSlideshow: PropTypes.func.isRequired,
   orientation: PropTypes.bool.isRequired,
   mobile: PropTypes.bool.isRequired,
+  fetchNext: PropTypes.func.isRequired,
+  selectPicture: PropTypes.func.isRequired,
+  picturesToLoad: PropTypes.number.isRequired,
 };
 
-export default Slideshow;
+function mapStateToProps(state) {
+  return ({
+    pictures: state.pictures.pictures,
+    loading: state.pictures.fetching,
+    selectedPictureIndex: state.pictures.selectedPictureIndex,
+    picturesToLoad: state.appearance.mobile ? 3 : 5,
+  });
+}
+
+export default connect(mapStateToProps, { fetchNext, selectPicture, closeSlideshow })(Slideshow);
