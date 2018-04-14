@@ -1,102 +1,79 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 
 import styles from './App.module.css';
 
+import { getViewport } from '../../store/actions';
 import Gallery from '../Gallery/Gallery';
 import Slideshow from '../Slideshow/Slideshow';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
-
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      focusedPic: null,
-      pictures: [],
-    };
-  }
-
   componentWillMount() {
-    this.loadPictures();
-    this.getViewport();
-    window.addEventListener('resize', debounce(this.getViewport.bind(this), 500), false);
-  }
-
-  getViewport() {
-    this.setState({
-      realWidth: document.documentElement.clientWidth,
-      width: document.documentElement.clientWidth - 24,
-      height: document.documentElement.clientHeight,
-    });
-  }
-
-  async loadPictures() {
-    const picturesQuery = await fetch('/pictures-data'),
-      pictures = await picturesQuery.json();
-
-    this.setState({ pictures });
-  }
-
-  focusPic(no) {
-    let newPictureIndex = no;
-    if (newPictureIndex === this.state.pictures.length) newPictureIndex = 0;
-    if (newPictureIndex === -1) newPictureIndex = this.state.pictures.length - 1;
-
-    this.setState({
-      focusedPic: newPictureIndex,
-    });
-  }
-
-  unfocusPic() {
-    this.setState({
-      focusedPic: null,
-    });
+    this.props.getViewport();
+    window.addEventListener('resize', debounce(this.props.getViewport, 500), false);
   }
 
   renderLoading() {
-    if (this.state.pictures[0]) return null;
+    if (this.props.pictures[0]) return null;
     return (
       <div className={styles.LoadingContainer}>
         <p className={styles.LoadingText}>Пожалуйста, подождите</p>
-        <LoadingIndicator/>
+        <LoadingIndicator />
       </div>
     );
   }
 
   render() {
-    const mobile = this.state.realWidth < 768,
-      width = mobile ? this.state.realWidth : this.state.width;
+    const width = this.props.mobile ? this.props.realWidth : this.props.width;
 
     return (
       <div className={styles.App}>
         {this.renderLoading()}
-        {this.state.focusedPic !== null && (
+        {this.props.screen === 'slideshow' && (
           <Slideshow
-            pictures={this.state.pictures}
-            selectedPictureIndex={this.state.focusedPic}
-            nextPicture={this.focusPic.bind(this, this.state.focusedPic + 1)}
-            previousPicture={this.focusPic.bind(this, this.state.focusedPic - 1)}
-            close={this.unfocusPic.bind(this)}
             width={width}
-            height={this.state.height}
-            mobile={mobile}
-            orientation={this.state.width > this.state.height}
+            height={this.props.height}
+            mobile={this.props.mobile}
+            orientation={this.props.orientation}
           />
         )}
-        <Gallery
-          pictures={this.state.pictures}
-          focusPic={this.focusPic.bind(this)}
-          width={width}
-          height={this.state.height}
-          mobile={mobile}
-          orientation={this.state.width > this.state.height}
-          calculateViewportSize={this.getViewport.bind(this)}
-          active={this.state.focusedPic === null}
-        />
+        {this.props.screen === 'gallery' && (
+          <Gallery
+            width={width}
+            height={this.props.height}
+            mobile={this.props.mobile}
+            orientation={this.props.orientation}
+          />
+        )}
       </div>
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  pictures: PropTypes.arrayOf(PropTypes.object).isRequired,
+  realWidth: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  orientation: PropTypes.bool.isRequired,
+  mobile: PropTypes.bool.isRequired,
+  screen: PropTypes.string.isRequired,
+  getViewport: PropTypes.func.isRequired,
+};
+
+function mapStateToProps(state) {
+  return ({
+    pictures: state.pictures.pictures,
+    realWidth: state.appearance.width,
+    width: state.appearance.width - 24,
+    height: state.appearance.height,
+    orientation: state.appearance.orientation,
+    mobile: state.appearance.mobile,
+    screen: state.appearance.screen,
+  });
+}
+
+export default connect(mapStateToProps, { getViewport })(App);
