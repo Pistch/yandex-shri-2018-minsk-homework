@@ -28,12 +28,12 @@ class Slideshow extends Component {
     if (!this.props.pictures[0]) this.props.fetchNext(0, this.props.picturesToLoad);
   }
 
-  changeSlidePosition(position) {
-    this.setState(position);
+  setGesture(gesture) {
+    this.setState({ gesture });
   }
 
-  setGesture(gesture) {
-    this.setState({ gesture })
+  changeSlidePosition(position) {
+    this.setState(position);
   }
 
   nextPicture() {
@@ -140,7 +140,6 @@ class Slideshow extends Component {
 }
 
 Slideshow.propTypes = {
-  width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   selectedPictureIndex: PropTypes.number.isRequired,
   pictures: PropTypes.arrayOf(PropTypes.shape({

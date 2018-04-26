@@ -15,10 +15,9 @@ describe('KeyboardHandler', () => {
         return (returnCount) => {
           if (returnCount) {
             return count;
-          } else {
-            count++;
           }
-        }
+          count++;
+        };
       },
       arrowUp = probe(),
       arrowDown = probe(),
@@ -26,16 +25,14 @@ describe('KeyboardHandler', () => {
       arrowRight = probe(),
       escape = probe();
 
-    const wrapper = mount(
-      <KeyboardHandler
-        onArrowDown={arrowDown}
-        onArrowRight={arrowRight}
-        onArrowUp={arrowUp}
-        onArrowLeft={arrowLeft}
-        onEscape={escape}
-        mockElem
-      />
-    );
+    const wrapper = mount(<KeyboardHandler
+      onArrowDown={arrowDown}
+      onArrowRight={arrowRight}
+      onArrowUp={arrowUp}
+      onArrowLeft={arrowLeft}
+      onEscape={escape}
+      mockElem
+    />);
 
     wrapper.simulate('keyup', { keyCode: 37 });
     wrapper.simulate('keyup', { keyCode: 38 });
@@ -44,7 +41,7 @@ describe('KeyboardHandler', () => {
     wrapper.simulate('keyup', { keyCode: 40 });
     wrapper.simulate('keyup', { keyCode: 27 });
     wrapper.simulate('keyup', { keyCode: 27, ctrlKey: true });
-    
+
     expect(arrowUp(true)).to.equal(1);
     expect(arrowDown(true)).to.equal(1);
     expect(arrowLeft(true)).to.equal(1);

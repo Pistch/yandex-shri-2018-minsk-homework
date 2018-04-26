@@ -71,8 +71,8 @@ class Swiper extends Component {
     const horizontalSwipeFunction = this.state.moveX > 0 ? this.props.onSwipeRight : this.props.onSwipeLeft,
       verticalSwipeFunction = this.state.moveY < 0 ? this.props.onSwipeUp : this.props.onSwipeDown,
       { gesture } = this.state,
-      verticalThreshold = (this.touchContainer.clientHeight || this.props.style.height) / 3,  // Why? For teh glory
-      horizontalThreshold = (this.touchContainer.clientWidth || this.props.style.width) / 3;  // of satan, of course...
+      verticalThreshold = (this.touchContainer.clientHeight || this.props.style.height) / 3, // Why? For teh glory
+      horizontalThreshold = (this.touchContainer.clientWidth || this.props.style.width) / 3; // of satan, of course...
 
     if (gesture === 'HORIZONTAL_SWIPE' && Math.abs(this.state.moveX) > horizontalThreshold) {
       horizontalSwipeFunction();
@@ -121,7 +121,8 @@ Swiper.propTypes = {
   onSwipeUp: PropTypes.func,
   onSwipeDown: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]),
-  style: PropTypes.shape({    // mock for tests
+  // mock for tests
+  style: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
   }),
