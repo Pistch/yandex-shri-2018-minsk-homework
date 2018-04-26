@@ -29,6 +29,8 @@ class Swiper extends Component {
       moveY: e.touches[0].clientY - this.state.touchInitialPositionY,
     };
 
+    console.log(relativeMove);
+
     this.props.touchMoveRelativePosition(relativeMove);
     this.setState(relativeMove);
   }
@@ -62,19 +64,23 @@ class Swiper extends Component {
       gesture,
       dX: undefined,
       dY: undefined,
+      moveX: x - this.state.touchInitialPositionX,
+      moveY: y - this.state.touchInitialPositionY,
     });
   }
 
   touchEnd() {
     const horizontalSwipeFunction = this.state.moveX > 0 ? this.props.onSwipeRight : this.props.onSwipeLeft,
       verticalSwipeFunction = this.state.moveY < 0 ? this.props.onSwipeUp : this.props.onSwipeDown,
-      { gesture } = this.state;
+      { gesture } = this.state,
+      verticalThreshold = (this.touchContainer.clientHeight || this.props.style.height) / 3,  // Why? For teh glory
+      horizontalThreshold = (this.touchContainer.clientWidth || this.props.style.width) / 3;  // of satan, of course...
 
-    if (gesture === 'HORIZONTAL_SWIPE' && Math.abs(this.state.moveX) > this.touchContainer.clientWidth / 3) {
+    if (gesture === 'HORIZONTAL_SWIPE' && Math.abs(this.state.moveX) > horizontalThreshold) {
       horizontalSwipeFunction();
     }
 
-    if (gesture === 'VERTICAL_SWIPE' && Math.abs(this.state.moveY) > this.touchContainer.clientHeight / 3) {
+    if (gesture === 'VERTICAL_SWIPE' && Math.abs(this.state.moveY) > verticalThreshold) {
       verticalSwipeFunction();
     }
 
@@ -100,6 +106,7 @@ class Swiper extends Component {
         onTouchMove={this.touchMove}
         onTouchEnd={this.touchEnd}
         ref={(c) => { this.touchContainer = c; }}
+        style={this.props.style}
       >
         {this.props.children}
       </div>
@@ -116,6 +123,10 @@ Swiper.propTypes = {
   onSwipeUp: PropTypes.func,
   onSwipeDown: PropTypes.func,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]),
+  style: PropTypes.shape({    // mock for tests
+    width: PropTypes.number,
+    height: PropTypes.number,
+  }),
 };
 
 Swiper.defaultProps = {
@@ -126,6 +137,8 @@ Swiper.defaultProps = {
   onSwipeDown: () => {},
   touchMoveRelativePosition: () => {},
   setGesture: () => {},
+  children: null,
+  style: null,
 };
 
 export default Swiper;
