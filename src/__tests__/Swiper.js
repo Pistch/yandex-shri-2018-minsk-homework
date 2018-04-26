@@ -13,31 +13,31 @@ describe('Swiper', () => {
     const setGesture = (gestureName) => {
       gesture = gestureName;
     };
-    const wrapper = mount(<Swiper setGesture={setGesture} style={{ width: 300, height: 300 }}/>);
+    const wrapper = mount(<Swiper setGesture={setGesture} style={{ width: 300, height: 300 }} />);
 
     wrapper.simulate('touchStart', {
       touches: [
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 150,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 151,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     expect(gesture)
       .to
@@ -51,24 +51,24 @@ describe('Swiper', () => {
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 50,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 40,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     expect(gesture)
       .to
@@ -82,24 +82,24 @@ describe('Swiper', () => {
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 100,
           clientY: 150,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     expect(gesture)
       .to
@@ -114,24 +114,24 @@ describe('Swiper', () => {
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 100,
           clientY: 50,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 100,
           clientY: 40,
-        }
-      ]
+        },
+      ],
     });
     expect(gesture)
       .to
@@ -149,15 +149,13 @@ describe('Swiper', () => {
       swipeLeft = () => swipeLeftCount++,
       swipeDown = () => swipeDownCount++,
       swipeUp = () => swipeUpCount++,
-      wrapper = mount(
-        <Swiper
-          style={{ width: 300, height: 300 }}
-          onSwipeUp={swipeUp}
-          onSwipeDown={swipeDown}
-          onSwipeLeft={swipeLeft}
-          onSwipeRight={swipeRight}
-        />
-      );
+      wrapper = mount(<Swiper
+        style={{ width: 300, height: 300 }}
+        onSwipeUp={swipeUp}
+        onSwipeDown={swipeDown}
+        onSwipeLeft={swipeLeft}
+        onSwipeRight={swipeRight}
+      />);
 
     // Правый свайп
 
@@ -166,24 +164,24 @@ describe('Swiper', () => {
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 150,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 250,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -195,24 +193,24 @@ describe('Swiper', () => {
         {
           clientX: 150,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 200,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 0,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -224,24 +222,24 @@ describe('Swiper', () => {
         {
           clientX: 150,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 200,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 100,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -253,24 +251,24 @@ describe('Swiper', () => {
         {
           clientX: 100,
           clientY: 50,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 220,
           clientY: 50,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 230,
           clientY: 250,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -282,24 +280,24 @@ describe('Swiper', () => {
         {
           clientX: 100,
           clientY: 50,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 100,
           clientY: 200,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 230,
           clientY: 250,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -311,24 +309,24 @@ describe('Swiper', () => {
         {
           clientX: 150,
           clientY: 200,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 150,
           clientY: 50,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 0,
           clientY: 0,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -340,24 +338,24 @@ describe('Swiper', () => {
         {
           clientX: 150,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 200,
           clientY: 150,
-        }
-      ]
+        },
+      ],
     });
     wrapper.simulate('touchMove', {
       touches: [
         {
           clientX: 0,
           clientY: 100,
-        }
-      ]
+        },
+      ],
     });
 
     wrapper.simulate('touchEnd');
@@ -366,5 +364,5 @@ describe('Swiper', () => {
     expect(swipeLeftCount).to.equal(1);
     expect(swipeDownCount).to.equal(1);
     expect(swipeUpCount).to.equal(1);
-  })
+  });
 });
