@@ -129,7 +129,7 @@ class Gallery extends Component {
                 width={this.props.orientation ? (this.props.height / item.height) * item.width : this.props.width}
                 pictureUrl={`pictures/${item.name}`}
                 onClick={() => this.selectPicture(i)}
-                key={item.name}
+                key={`${item.name}${Math.random()}`}
               />
             ))
           }
