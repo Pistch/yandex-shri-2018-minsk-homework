@@ -6,6 +6,7 @@ import { fetchNext, selectPicture, closeSlideshow } from '../../store/actions';
 
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 import Swiper from '../Swiper/Swiper';
+import KeyboardHandler from '../KeyboardHandler/KeyboardHandler';
 
 import styles from './Slideshow.module.css';
 
@@ -16,7 +17,6 @@ class Slideshow extends Component {
       moveX: 0,
       moveY: 0,
     };
-    this.onKeyPress = this.onKeyPress.bind(this);
     this.nextPicture = this.nextPicture.bind(this);
     this.previousPicture = this.previousPicture.bind(this);
     this.close = this.close.bind(this);
@@ -26,28 +26,6 @@ class Slideshow extends Component {
 
   componentWillMount() {
     if (!this.props.pictures[0]) this.props.fetchNext(0, this.props.picturesToLoad);
-    window.addEventListener('keyup', this.onKeyPress);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keyup', this.onKeyPress);
-  }
-
-  onKeyPress(e) {
-    const { keyCode } = e;
-
-    switch (keyCode) {
-      case 37:
-      case 38:
-        return this.previousPicture();
-      case 39:
-      case 40:
-        return this.nextPicture();
-      case 27:
-        return this.close();
-      default:
-        return null;
-    }
   }
 
   changeSlidePosition(position) {
@@ -123,6 +101,13 @@ class Slideshow extends Component {
 
     return (
       <React.Fragment>
+        <KeyboardHandler
+          onArrowDown={this.nextPicture}
+          onArrowRight={this.nextPicture}
+          onArrowUp={this.previousPicture}
+          onArrowLeft={this.previousPicture}
+          onEscape={this.close}
+        />
         <div className={styles.SlideshowOverlay}>
           {this.renderPictureSequence()}
         </div>
