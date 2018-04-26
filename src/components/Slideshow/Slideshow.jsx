@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { fetchNext, selectPicture, closeSlideshow } from '../../store/actions';
 
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
+import Swiper from '../Swiper/Swiper';
 
 import styles from './Slideshow.module.css';
 
@@ -13,16 +14,14 @@ class Slideshow extends Component {
     super(props);
     this.state = {
       moveX: 0,
-      touchInitialPositionX: undefined,
-      gesture: undefined,
+      moveY: 0,
     };
     this.onKeyPress = this.onKeyPress.bind(this);
     this.nextPicture = this.nextPicture.bind(this);
     this.previousPicture = this.previousPicture.bind(this);
     this.close = this.close.bind(this);
-    this.touchStart = this.touchStart.bind(this);
-    this.touchMove = this.touchMove.bind(this);
-    this.touchEnd = this.touchEnd.bind(this);
+    this.changeSlidePosition = this.changeSlidePosition.bind(this);
+    this.setGesture = this.setGesture.bind(this);
   }
 
   componentWillMount() {
@@ -51,75 +50,12 @@ class Slideshow extends Component {
     }
   }
 
-  touchStart(e) {
-    this.setState({
-      touchInitialPositionX: e.touches[0].clientX,
-      touchInitialPositionY: e.touches[0].clientY,
-    });
+  changeSlidePosition(position) {
+    this.setState(position);
   }
 
-  touchMove(e) {
-    if (!this.state.gesture) {
-      return this.resolveGesture(
-        e.touches[0].clientX,
-        e.touches[0].clientY,
-      );
-    }
-
-    this.setState({
-      moveX: e.touches[0].clientX - this.state.touchInitialPositionX,
-      moveY: e.touches[0].clientY - this.state.touchInitialPositionY,
-    });
-  }
-
-  resolveGesture(x, y) {
-    if (!this.state.dX && !this.state.dY) {
-      return this.setState({
-        dX: x - this.state.touchInitialPositionX,
-        dY: y - this.state.touchInitialPositionY,
-      });
-    }
-
-    const dX = Math.abs(this.state.dX),
-      dY = Math.abs(this.state.dY);
-
-    const verticalGestureFlag = dY > dX * 1.7,
-      horizontalGestureFlag = dX > dY * 1.7;
-
-    if (!verticalGestureFlag && !horizontalGestureFlag) {
-      return this.setState({
-        dX: x - this.state.touchInitialPositionX,
-        dY: y - this.state.touchInitialPositionY,
-      });
-    }
-
-    const gesture = verticalGestureFlag ? 'VERTICAL_SWIPE' : 'HORIZONTAL_SWIPE';
-
-    this.setState({
-      gesture,
-      dX: undefined,
-      dY: undefined,
-    });
-  }
-
-  touchEnd() {
-    const changeSlideFunction = this.state.moveX > 0 ? this.previousPicture : this.nextPicture,
-      { gesture } = this.state;
-
-    if (gesture === 'HORIZONTAL_SWIPE' && Math.abs(this.state.moveX) > this.props.width / 3) {
-      changeSlideFunction();
-    }
-
-    if (gesture === 'VERTICAL_SWIPE' && -this.state.moveY > this.props.height / 3) {
-      return this.close();
-    }
-
-    this.setState({
-      touchInitialPositionX: undefined,
-      moveX: 0,
-      moveY: 0,
-      gesture: undefined,
-    });
+  setGesture(gesture) {
+    this.setState({ gesture })
   }
 
   nextPicture() {
@@ -190,14 +126,16 @@ class Slideshow extends Component {
         <div className={styles.SlideshowOverlay}>
           {this.renderPictureSequence()}
         </div>
-        <div
+        <Swiper
           className={`${styles.Controls}
             ${mobile ? styles.Mobile : styles.Desktop}
             ${orientation ? styles.Horizontal : styles.Vertical}
            `}
-          onTouchStart={this.touchStart}
-          onTouchMove={this.touchMove}
-          onTouchEnd={this.touchEnd}
+          onSwipeRight={this.previousPicture}
+          onSwipeLeft={this.nextPicture}
+          onSwipeUp={this.close}
+          setGesture={this.setGesture}
+          touchMoveRelativePosition={this.changeSlidePosition}
         >
           {
             selectedPictureIndex ?
@@ -209,7 +147,7 @@ class Slideshow extends Component {
               (<button onClick={this.nextPicture} className={styles.Button}>&rarr;</button>) :
               (<span />)
           }
-        </div>
+        </Swiper>
         <button onClick={this.close} className={`${styles.Button} ${styles.CloseButton}`}>&times;</button>
       </React.Fragment>
     );
