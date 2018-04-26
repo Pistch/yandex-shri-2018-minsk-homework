@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class KeyboardHandler extends Component {
@@ -35,6 +35,7 @@ class KeyboardHandler extends Component {
   }
 
   render() {
+    if (this.props.mockElem) return <div onKeyUp={this.onKeyPress}>123</div>;
     return null;
   }
 }
@@ -45,6 +46,7 @@ KeyboardHandler.propTypes = {
   onArrowUp: PropTypes.func,
   onArrowDown: PropTypes.func,
   onEscape: PropTypes.func,
+  mockElem: PropTypes.bool,
 };
 
 KeyboardHandler.defaultProps = {
@@ -53,6 +55,7 @@ KeyboardHandler.defaultProps = {
   onArrowUp: () => {},
   onArrowDown: () => {},
   onEscape: () => {},
+  mockElem: false,
 };
 
 export default KeyboardHandler;
