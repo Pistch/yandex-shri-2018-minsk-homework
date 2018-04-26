@@ -7,8 +7,8 @@ function GalleryItem({
   height, width, pictureUrl, onClick,
 }) {
   return (
-    <div style={{ height, width }} className={styles.PreviewContainer}>
-      <img src={pictureUrl} alt="" className={styles.Preview} onClick={onClick} />
+    <div style={{ height, width }} className={styles.PreviewContainer} onClick={onClick}>
+      <img src={pictureUrl} alt="" className={styles.Preview} />
     </div>
   );
 }
