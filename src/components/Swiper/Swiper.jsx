@@ -29,8 +29,6 @@ class Swiper extends Component {
       moveY: e.touches[0].clientY - this.state.touchInitialPositionY,
     };
 
-    console.log(relativeMove);
-
     this.props.touchMoveRelativePosition(relativeMove);
     this.setState(relativeMove);
   }
