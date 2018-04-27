@@ -52,7 +52,7 @@ class Gallery extends Component {
     for (let i = 0, q = this.props.pictures.length; i < q; i++) {
       const picture = this.props.pictures[i];
 
-      if (!(structure[rowIndex] instanceof Array)) {
+      if (!structure[rowIndex]) {
         structure.push({
           height: 0,
           pictures: [],
@@ -89,7 +89,7 @@ class Gallery extends Component {
   }
 
   renderRow(rowData, key) {
-    if (!rowData.pictures[0] || !rowData.pictures[1]) return null;
+    if (!rowData.pictures[0]) return null;
     return (
       <div
         className={styles.GalleryRow}
@@ -170,3 +170,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, { fetchNext, selectPicture, openSlideshow })(Gallery);
+
+export const TestGallery = Gallery;
