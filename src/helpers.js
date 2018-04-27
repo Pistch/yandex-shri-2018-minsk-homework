@@ -1,11 +1,13 @@
-export const probe = () => {
+export const probe = (fn) => {
   let count = 0;
 
-  return function counter(returnCount) {
-    if (returnCount === true) {
+  return function counter(...args) {
+    if (args[args.length - 1] === true) {
       return count;
     }
+
     count++;
+    return fn ? fn(...args) : null;
   };
 };
 
