@@ -17,12 +17,11 @@ class Gallery extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.pictures[0] && !this.props.loading) this.props.fetchNext(0, this.props.picturesToLoad);
+    if (!this.props.pictures[0] && !this.props.loading) this.props.fetchNext(0, this.props.picturesToLoad * 2);
   }
 
   componentDidMount() {
     document.addEventListener('scroll', this.handleScroll);
-    this.handleScroll();
   }
 
   componentWillUnmount() {
@@ -30,6 +29,8 @@ class Gallery extends Component {
   }
 
   handleScroll() {
+    if (this.props.loading) return;
+
     const
       scroll = !this.props.orientation ? window.pageYOffset : window.pageXOffset,
       possibleScroll = !this.props.orientation ? this.scrollContainer.scrollHeight : this.scrollContainer.scrollWidth,
@@ -38,7 +39,7 @@ class Gallery extends Component {
         possibleScroll - scroll - this.props.width,
       threshold = this.props.mobile ? this.props.height * 2 : (this.props.height / 3);
 
-    if (!this.props.loading && leftToScroll < threshold) {
+    if (leftToScroll < threshold) {
       this.props.fetchNext(this.props.pictures.length, this.props.picturesToLoad);
     }
   }
