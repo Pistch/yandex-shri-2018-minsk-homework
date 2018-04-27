@@ -25,8 +25,6 @@ async function parseImages() {
 
   imagesInfo = imagesInfo.filter(img => img);
 
-  imagesInfo.sort(() => Math.random() - 0.5);
-
   return Promise.resolve(imagesInfo);
 }
 
