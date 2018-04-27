@@ -1,8 +1,9 @@
 module.exports = {
-  rootUrl: 'http://100.124.107.167:3000',
+  rootUrl: 'https://homework-test-stand.herokuapp.com',
   gridUrl: 'http://localhost:4444/wd/hub',
+  windowSize: '1280x1024',
   compositeImage: true,
-  windowSize: '1920x1080',
+  retry: 3,
 
   browsers: {
     chromeMobileVertical: {
@@ -40,16 +41,7 @@ module.exports = {
     chromeDesktop: {
       desiredCapabilities: {
         browserName: 'chrome',
-        chromeOptions: {
-          mobileEmulation: {
-            deviceMetrics: {
-              width: 1280,
-              height: 1024,
-              pixelRatio: 1
-            }
-          }
-        }
-      }
+      },
     }
   }
 };
