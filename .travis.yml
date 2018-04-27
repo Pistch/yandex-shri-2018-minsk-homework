@@ -2,8 +2,9 @@ sudo: false
 language: node_js
 
 node_js:
-  - 'node'
+  - "lts/*"
 
 script:
-- npm run lint
-- npm test
+  - npm run lint
+  - npm test
+  - npm run build
