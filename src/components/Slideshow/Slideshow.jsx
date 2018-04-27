@@ -166,3 +166,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, { fetchNext, selectPicture, closeSlideshow })(Slideshow);
+
+export const TestSlideshow = Slideshow;
